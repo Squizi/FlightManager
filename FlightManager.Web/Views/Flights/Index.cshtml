@@ -1,0 +1,84 @@
+﻿@model IEnumerable<FlightManager.Data.Models.Flights>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Flights</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Destination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerCapacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerCapacityBussinessClass)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartLocation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Destination)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @((item.EndTime - item.StartTime).ToString("c"))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerCapacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerCapacityBussinessClass)
+            </td>
+            <td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    }
+                    if (User.IsInRole("admin") || User.IsInRole("employee"))
+                    {
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                    }
+                    if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
