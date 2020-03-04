@@ -64,15 +64,15 @@
             <td>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    if (User.IsInRole("admin"))
+                    if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
                     }
-                    if (User.IsInRole("admin") || User.IsInRole("employee"))
+                    if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
                         <a asp-action="Details" asp-route-id="@item.ID">Details</a>
                     }
-                    if (User.IsInRole("admin"))
+                    if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                     }

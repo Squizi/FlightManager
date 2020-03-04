@@ -7,9 +7,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FlightManager.Controllers
+namespace FlightManager.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
+    [Area("Admin")]
     public class FlightsController : Controller
     {
         private readonly ApplicationDbContext _context;
