@@ -32,6 +32,7 @@ namespace FlightManager.Data.Models
 
         [Display(Name = "Customer Capacity Bussiness Class")]
         public int CustomerCapacityBussinessClass { get; set; }
+
         public ICollection<Reservations> Reservations { get; set; }
     }
 }

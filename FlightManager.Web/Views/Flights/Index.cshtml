@@ -1,0 +1,153 @@
+﻿@model FlightManager.Web.Models.FlightsViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Flights</h1>
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+    <div class="form-actions no-color">
+        <p>
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.StartLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.Destination)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.EndTime)
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.CustomerCapacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.model.CustomerCapacityBussinessClass)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Flights)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Destination)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @((item.EndTime - item.StartTime).ToString("c"))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerCapacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerCapacityBussinessClass)
+                </td>
+                <td>
+                    <a asp-controller="Reservations" asp-action="Index" asp-route-id="@item.ID">Make a reservation</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@{
+    var prevDisabled = !Model.Flights.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Flights.HasNextPage ? "disabled" : "";
+    var showFromPage = Model.Flights.PageIndex - 1;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+    var showToPage = showFromPage + 2;
+    showToPage = showToPage > Model.Flights.TotalPages ? Model.Flights.TotalPages : showToPage;
+    showFromPage = showToPage - 2;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+}
+
+@if (@Model.Flights.TotalPages > 0)
+{
+    <form asp-action="Index" method="get">
+        <input type="hidden" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <nav aria-label="Pagination">
+                    <ul class="pagination">
+                        <li class="page-item @prevDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.Flights.PageIndex - 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Previous
+                            </a>
+                        </li>
+                        @for (int i = showFromPage; i <= showToPage; i++)
+                        {
+                            if (i == Model.Flights.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a asp-action="Index"
+                                       asp-route-pageNumber="@(i)"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                                       class="page-link">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+                        }
+                        <li class="page-item @nextDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.Flights.PageIndex + 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label class="float-right">Show <select id="ResultsOnPage" name="ResultsOnPage" asp-items="@Model.ResultsOnPageList" class="custom-select custom-select-sm form-control form-control-sm" style="width: auto;"></select> entries</label>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <span>No flights was found</span>
+}
