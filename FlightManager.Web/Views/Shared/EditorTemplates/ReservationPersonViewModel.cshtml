@@ -1,0 +1,67 @@
+﻿@using System.Text.RegularExpressions
+@model FlightManager.Web.Models.ReservationPersonViewModel
+
+@{
+    string index = Regex.Match(ViewData.TemplateInfo.HtmlFieldPrefix, @"(?!\[)\d+(?=\])").ToString();
+}
+
+<div class="form-group">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Person @(int.Parse(index) + 1)</h5>
+            <blockquote class="card-blockquote">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="FatherName" class="control-label"></label>
+                            <input asp-for="FatherName" class="form-control" />
+                            <span asp-validation-for="FatherName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="SSN" class="control-label"></label>
+                            <input asp-for="SSN" class="form-control" />
+                            <span asp-validation-for="SSN" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Nationality" class="control-label"></label>
+                            <input asp-for="Nationality" class="form-control" />
+                            <span asp-validation-for="Nationality" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-check">
+                            <input asp-for="IsBussinesClass" class="form-check-input" />
+                            <label asp-for="IsBussinesClass" class="form-check-label"></label>
+                            <span asp-validation-for="IsBussinesClass" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </blockquote>
+        </div>
+    </div>
+</div>

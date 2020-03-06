@@ -19,10 +19,12 @@ namespace FlightManager.Data.Models
 
         [Display(Name = "Arrive at")]
         public DateTime EndTime { get; set; }
-        public string Type { get; set; }
 
-        [Display(Name = "Uniqe Plane Number")]
-        public int UniqePlaneNumber { get; set; }
+        [Display(Name = "Plane type")]
+        public string PlaneType { get; set; }
+
+        [Display(Name = "Flight number")]
+        public string FlightNumber { get; set; }
 
         [Display(Name = "Pilot Name")]
         public string PilotName { get; set; }

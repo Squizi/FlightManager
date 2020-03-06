@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200303125337_CreateFlightsAndReaservations.cs" />
     <Compile Remove="Migrations\20200303125337_CreateFlightsAndReaservations.Designer.cs" />
+    <Compile Remove="Migrations\20200303232111_CreateFlightsAndReaservations.cs" />
+    <Compile Remove="Migrations\20200303232111_CreateFlightsAndReaservations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

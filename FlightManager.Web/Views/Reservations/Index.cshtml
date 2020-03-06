@@ -1,0 +1,49 @@
+﻿@model FlightManager.Web.Models.ReservationsViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Make a reservation</h1>
+
+<div class="card mb-5">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Flight.StartLocation - @Model.Flight.Destination</h5>
+        <p class="card-text">
+            Departure at: @Model.Flight.StartTime<br />
+            Duration: @((Model.Flight.EndTime - Model.Flight.StartTime).ToString("c"))<br />
+            Free seats: @Model.FreeSeats<br />
+            Free seats business class: @Model.FreeSeatsBusinessClass
+        </p>
+    </div>
+</div>
+
+<form asp-action="Index" method="post">
+
+    <input type="hidden" name="flight" value="@ViewData["flight"]" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div id="ReservationPersons">
+        @Html.EditorFor(model => model.ReservationPersons)
+    </div>
+
+    <div class="form-group">
+        <input id="AddPerson" type="button" value="Add person" class="btn btn-success" />
+        <input id="RemoveLastPerson" type="button" value="Remove last person" class="btn btn-danger" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create reservation" class="btn btn-primary" />
+    </div>
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

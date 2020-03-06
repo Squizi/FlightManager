@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlightManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200303232111_CreateFlightsAndReaservations")]
+    [Migration("20200306144924_CreateFlightsAndReaservations")]
     partial class CreateFlightsAndReaservations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,21 +103,21 @@ namespace FlightManager.Data.Migrations
                         {
                             Id = "7b4cdf1a-54a6-4961-9b0e-defad96b79a0",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f29ad69b-fe17-48ac-97dd-b052bb28a823",
+                            ConcurrencyStamp = "21f682df-9a01-4cbc-b7d7-cb533c2a722f",
                             Email = "admin@dev.local",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@dev.local",
                             NormalizedUserName = "admin@dev.local",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGYDrYT6IdaefKcl1x1rGxowIY9wPSkjH+kn3pXkwFjvdOyJBSSr5YK+OmqmvbhxbQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGoOiDZ4NOJl0WTeq3TYbzK3pOhHoVfRDSZPrvbsXVnTI76FvkD2gL/UMj9uLP/QQQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b4f3ee4d-5887-4c13-a6b4-27e2232c68fd",
+                            SecurityStamp = "b3947a52-3437-4540-885f-0f60ddb24124",
                             TwoFactorEnabled = false,
                             UserName = "admin@dev.local"
                         });
                 });
 
-            modelBuilder.Entity("FlightManager.Models.DB.Flights", b =>
+            modelBuilder.Entity("FlightManager.Data.Models.Flights", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -135,7 +135,13 @@ namespace FlightManager.Data.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FlightNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PilotName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaneType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StartLocation")
@@ -144,18 +150,183 @@ namespace FlightManager.Data.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UniqePlaneNumber")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.ToTable("Flight");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("c419635b-d2af-4e7e-a799-53c1f1b80399"),
+                            CustomerCapacity = 24,
+                            CustomerCapacityBussinessClass = 4,
+                            Destination = "Dubai",
+                            EndTime = new DateTime(2020, 6, 1, 18, 23, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "FZ1758",
+                            PilotName = "Harold Estrada",
+                            PlaneType = "Boeing 737-800",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 10, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("d393eb41-6567-494b-9ab3-57177b09a903"),
+                            CustomerCapacity = 12,
+                            CustomerCapacityBussinessClass = 2,
+                            Destination = "Frankfurt",
+                            EndTime = new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "LH1427",
+                            PilotName = "Douglas Fernandez",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 15, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("7d377536-59e5-405a-a82f-b2a9f3ab01b9"),
+                            CustomerCapacity = 96,
+                            CustomerCapacityBussinessClass = 6,
+                            Destination = "Eindhoven",
+                            EndTime = new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "W64325",
+                            PilotName = "Heather Hudson",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 35, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("4ff1c64b-4a57-4bce-9f14-bc678e5a0516"),
+                            CustomerCapacity = 56,
+                            CustomerCapacityBussinessClass = 0,
+                            Destination = "Warsaw",
+                            EndTime = new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "LO632",
+                            PilotName = "Ronald Howard",
+                            PlaneType = "Embraer 190",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 40, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("4d977c66-3bb0-48c5-9b1a-ff6924ebcf09"),
+                            CustomerCapacity = 105,
+                            CustomerCapacityBussinessClass = 10,
+                            Destination = "Geneve",
+                            EndTime = new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "W64319",
+                            PilotName = "Lori Sandoval",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 45, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("c46ecd37-f359-453c-b47c-054c3ecadc4b"),
+                            CustomerCapacity = 138,
+                            CustomerCapacityBussinessClass = 12,
+                            Destination = "Varna",
+                            EndTime = new DateTime(2020, 6, 1, 15, 43, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "FB977",
+                            PilotName = "Joe White",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 14, 45, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("09ca8671-073a-4391-a4c9-a5e6462dc41c"),
+                            CustomerCapacity = 72,
+                            CustomerCapacityBussinessClass = 0,
+                            Destination = "Belgrade",
+                            EndTime = new DateTime(2020, 6, 1, 16, 55, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "JU123",
+                            PilotName = "Diane McDonald",
+                            PlaneType = "ATR 72",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("a13790d0-d926-494d-9fc8-7530601cc078"),
+                            CustomerCapacity = 114,
+                            CustomerCapacityBussinessClass = 16,
+                            Destination = "Madrid",
+                            EndTime = new DateTime(2020, 6, 1, 18, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "FR6409A",
+                            PilotName = "Steven Carroll",
+                            PlaneType = "Boeing 737",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 16, 55, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("35e9fb5e-fdb7-4a80-84da-46e9ea10a4e8"),
+                            CustomerCapacity = 114,
+                            CustomerCapacityBussinessClass = 12,
+                            Destination = "Paris Beauvais",
+                            EndTime = new DateTime(2020, 6, 1, 19, 10, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "FR6793",
+                            PilotName = "Eric Hunt",
+                            PlaneType = "Boeing 737",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("d9fd06c8-500c-443f-a7b4-2218158d99bd"),
+                            CustomerCapacity = 180,
+                            CustomerCapacityBussinessClass = 2,
+                            Destination = "Brussels",
+                            EndTime = new DateTime(2020, 6, 1, 20, 5, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "FB407A",
+                            PilotName = "Phillip Vasquez",
+                            PlaneType = "Embraer 190",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 17, 55, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("cd0a2f6e-5ae8-4024-87dc-3cf5e0aee659"),
+                            CustomerCapacity = 85,
+                            CustomerCapacityBussinessClass = 4,
+                            Destination = "Athens",
+                            EndTime = new DateTime(2020, 6, 1, 22, 40, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "A3983",
+                            PilotName = "Donald Chavez",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("cb49636c-8513-4e92-a37f-db02d8d418d0"),
+                            CustomerCapacity = 112,
+                            CustomerCapacityBussinessClass = 8,
+                            Destination = "Nuremberg",
+                            EndTime = new DateTime(2020, 6, 1, 22, 45, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "W64343",
+                            PilotName = "Sean Bell",
+                            PlaneType = "Airbus A320",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 20, 30, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            ID = new Guid("f76be08d-9b04-4a57-9268-d33617fce3a2"),
+                            CustomerCapacity = 132,
+                            CustomerCapacityBussinessClass = 14,
+                            Destination = "Vienna",
+                            EndTime = new DateTime(2020, 6, 1, 23, 15, 0, 0, DateTimeKind.Unspecified),
+                            FlightNumber = "OS794",
+                            PilotName = "Elizabeth Collins",
+                            PlaneType = "Embraer 195",
+                            StartLocation = "Sofia",
+                            StartTime = new DateTime(2020, 6, 1, 21, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
-            modelBuilder.Entity("FlightManager.Models.DB.ReservationPersons", b =>
+            modelBuilder.Entity("FlightManager.Data.Models.ReservationPersons", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -195,7 +366,7 @@ namespace FlightManager.Data.Migrations
                     b.ToTable("ReservationPersons");
                 });
 
-            modelBuilder.Entity("FlightManager.Models.DB.Reservations", b =>
+            modelBuilder.Entity("FlightManager.Data.Models.Reservations", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -249,14 +420,14 @@ namespace FlightManager.Data.Migrations
                         new
                         {
                             Id = "82f3efb2-c932-48e5-b39f-c9c64f5cb103",
-                            ConcurrencyStamp = "5a894841-7a7a-4b81-8e70-2798e3b6e82e",
+                            ConcurrencyStamp = "427a9821-b51a-49f9-838d-5244e32e40d5",
                             Name = "Admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
                             Id = "0efa7782-607f-4353-a482-e300d6bef13b",
-                            ConcurrencyStamp = "22675944-b0c9-48b6-a957-c7a39dd1b1ab",
+                            ConcurrencyStamp = "230a709c-b6bc-4728-9e1b-48e2e470b233",
                             Name = "Employee",
                             NormalizedName = "employee"
                         });
@@ -377,17 +548,17 @@ namespace FlightManager.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FlightManager.Models.DB.ReservationPersons", b =>
+            modelBuilder.Entity("FlightManager.Data.Models.ReservationPersons", b =>
                 {
-                    b.HasOne("FlightManager.Models.DB.Reservations", "Reservation")
+                    b.HasOne("FlightManager.Data.Models.Reservations", "Reservation")
                         .WithMany("ReservationPersons")
                         .HasForeignKey("ReservationID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FlightManager.Models.DB.Reservations", b =>
+            modelBuilder.Entity("FlightManager.Data.Models.Reservations", b =>
                 {
-                    b.HasOne("FlightManager.Models.DB.Flights", "Flight")
+                    b.HasOne("FlightManager.Data.Models.Flights", "Flight")
                         .WithMany("Reservations")
                         .HasForeignKey("FlightID")
                         .OnDelete(DeleteBehavior.Cascade);

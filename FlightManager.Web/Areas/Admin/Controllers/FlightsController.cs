@@ -57,7 +57,7 @@ namespace FlightManager.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StartLocation,Destination,StartTime,EndTime,Type,UniqePlaneNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
+        public async Task<IActionResult> Create([Bind("ID,StartLocation,Destination,StartTime,EndTime,PlaneType,FlightNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace FlightManager.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,StartLocation,Destination,StartTime,EndTime,Type,UniqePlaneNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,StartLocation,Destination,StartTime,EndTime,PlaneType,FlightNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
         {
             if (id != flights.ID)
             {

@@ -43,8 +43,8 @@ namespace FlightManager.Data.Migrations
                     Destination = table.Column<string>(nullable: true),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
-                    Type = table.Column<string>(nullable: true),
-                    UniqePlaneNumber = table.Column<int>(nullable: false),
+                    PlaneType = table.Column<string>(nullable: true),
+                    FlightNumber = table.Column<string>(nullable: true),
                     PilotName = table.Column<string>(nullable: true),
                     CustomerCapacity = table.Column<int>(nullable: false),
                     CustomerCapacityBussinessClass = table.Column<int>(nullable: false)
@@ -103,17 +103,36 @@ namespace FlightManager.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "82f3efb2-c932-48e5-b39f-c9c64f5cb103", "5a894841-7a7a-4b81-8e70-2798e3b6e82e", "Admin", "admin" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0efa7782-607f-4353-a482-e300d6bef13b", "22675944-b0c9-48b6-a957-c7a39dd1b1ab", "Employee", "employee" });
+                values: new object[,]
+                {
+                    { "82f3efb2-c932-48e5-b39f-c9c64f5cb103", "427a9821-b51a-49f9-838d-5244e32e40d5", "Admin", "admin" },
+                    { "0efa7782-607f-4353-a482-e300d6bef13b", "230a709c-b6bc-4728-9e1b-48e2e470b233", "Employee", "employee" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SSN", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "7b4cdf1a-54a6-4961-9b0e-defad96b79a0", 0, null, "f29ad69b-fe17-48ac-97dd-b052bb28a823", "admin@dev.local", true, null, null, false, null, "admin@dev.local", "admin@dev.local", "AQAAAAEAACcQAAAAEGYDrYT6IdaefKcl1x1rGxowIY9wPSkjH+kn3pXkwFjvdOyJBSSr5YK+OmqmvbhxbQ==", null, false, null, "b4f3ee4d-5887-4c13-a6b4-27e2232c68fd", false, "admin@dev.local" });
+                values: new object[] { "7b4cdf1a-54a6-4961-9b0e-defad96b79a0", 0, null, "21f682df-9a01-4cbc-b7d7-cb533c2a722f", "admin@dev.local", true, null, null, false, null, "admin@dev.local", "admin@dev.local", "AQAAAAEAACcQAAAAEGoOiDZ4NOJl0WTeq3TYbzK3pOhHoVfRDSZPrvbsXVnTI76FvkD2gL/UMj9uLP/QQQ==", null, false, null, "b3947a52-3437-4540-885f-0f60ddb24124", false, "admin@dev.local" });
+
+            migrationBuilder.InsertData(
+                table: "Flight",
+                columns: new[] { "ID", "CustomerCapacity", "CustomerCapacityBussinessClass", "Destination", "EndTime", "FlightNumber", "PilotName", "PlaneType", "StartLocation", "StartTime" },
+                values: new object[,]
+                {
+                    { new Guid("c419635b-d2af-4e7e-a799-53c1f1b80399"), 24, 4, "Dubai", new DateTime(2020, 6, 1, 18, 23, 0, 0, DateTimeKind.Unspecified), "FZ1758", "Harold Estrada", "Boeing 737-800", "Sofia", new DateTime(2020, 6, 1, 14, 10, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("d393eb41-6567-494b-9ab3-57177b09a903"), 12, 2, "Frankfurt", new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified), "LH1427", "Douglas Fernandez", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 14, 15, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("7d377536-59e5-405a-a82f-b2a9f3ab01b9"), 96, 6, "Eindhoven", new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified), "W64325", "Heather Hudson", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 14, 35, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("4ff1c64b-4a57-4bce-9f14-bc678e5a0516"), 56, 0, "Warsaw", new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified), "LO632", "Ronald Howard", "Embraer 190", "Sofia", new DateTime(2020, 6, 1, 14, 40, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("4d977c66-3bb0-48c5-9b1a-ff6924ebcf09"), 105, 10, "Geneve", new DateTime(2020, 6, 1, 16, 40, 0, 0, DateTimeKind.Unspecified), "W64319", "Lori Sandoval", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 14, 45, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("c46ecd37-f359-453c-b47c-054c3ecadc4b"), 138, 12, "Varna", new DateTime(2020, 6, 1, 15, 43, 0, 0, DateTimeKind.Unspecified), "FB977", "Joe White", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 14, 45, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("09ca8671-073a-4391-a4c9-a5e6462dc41c"), 72, 0, "Belgrade", new DateTime(2020, 6, 1, 16, 55, 0, 0, DateTimeKind.Unspecified), "JU123", "Diane McDonald", "ATR 72", "Sofia", new DateTime(2020, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("a13790d0-d926-494d-9fc8-7530601cc078"), 114, 16, "Madrid", new DateTime(2020, 6, 1, 18, 40, 0, 0, DateTimeKind.Unspecified), "FR6409A", "Steven Carroll", "Boeing 737", "Sofia", new DateTime(2020, 6, 1, 16, 55, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("35e9fb5e-fdb7-4a80-84da-46e9ea10a4e8"), 114, 12, "Paris Beauvais", new DateTime(2020, 6, 1, 19, 10, 0, 0, DateTimeKind.Unspecified), "FR6793", "Eric Hunt", "Boeing 737", "Sofia", new DateTime(2020, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("d9fd06c8-500c-443f-a7b4-2218158d99bd"), 180, 2, "Brussels", new DateTime(2020, 6, 1, 20, 5, 0, 0, DateTimeKind.Unspecified), "FB407A", "Phillip Vasquez", "Embraer 190", "Sofia", new DateTime(2020, 6, 1, 17, 55, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("cd0a2f6e-5ae8-4024-87dc-3cf5e0aee659"), 85, 4, "Athens", new DateTime(2020, 6, 1, 22, 40, 0, 0, DateTimeKind.Unspecified), "A3983", "Donald Chavez", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("cb49636c-8513-4e92-a37f-db02d8d418d0"), 112, 8, "Nuremberg", new DateTime(2020, 6, 1, 22, 45, 0, 0, DateTimeKind.Unspecified), "W64343", "Sean Bell", "Airbus A320", "Sofia", new DateTime(2020, 6, 1, 20, 30, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("f76be08d-9b04-4a57-9268-d33617fce3a2"), 132, 14, "Vienna", new DateTime(2020, 6, 1, 23, 15, 0, 0, DateTimeKind.Unspecified), "OS794", "Elizabeth Collins", "Embraer 195", "Sofia", new DateTime(2020, 6, 1, 21, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

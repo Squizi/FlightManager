@@ -14,6 +14,7 @@ namespace FlightManager.Data
 
         public virtual DbSet<Flights> Flight { get; set; }
         public virtual DbSet<Reservations> Reservations { get; set; }
+        public virtual DbSet<ReservationPersons> ReservationPersons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

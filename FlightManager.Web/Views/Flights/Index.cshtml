@@ -69,7 +69,7 @@
                     @Html.DisplayFor(modelItem => item.CustomerCapacityBussinessClass)
                 </td>
                 <td>
-                    <a asp-controller="Reservations" asp-action="Index" asp-route-id="@item.ID">Make a reservation</a>
+                    <a asp-controller="Reservations" asp-action="Index" asp-route-flight="@item.ID">Make a reservation</a>
                 </td>
             </tr>
         }
