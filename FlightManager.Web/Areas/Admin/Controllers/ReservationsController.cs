@@ -37,13 +37,15 @@ namespace FlightManager.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var reservations = await _context.Reservations
-                .FirstOrDefaultAsync(m => m.ID == id);
+            
+            var reservations = await _context.Reservations.Where(r => r.ID == id).Include(p => p.ReservationPersons).AsNoTracking().FirstOrDefaultAsync();
             if (reservations == null)
             {
                 return NotFound();
             }
+
+            //var people = reservations.ReservationPersons;
+            //var people = await _context.Reservations.Include(p => p.ReservationPersons).AsNoTracking();
 
             return View(reservations);
         }
