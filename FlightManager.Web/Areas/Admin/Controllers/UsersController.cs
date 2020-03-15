@@ -1,5 +1,6 @@
 ﻿using FlightManager.Data;
 using FlightManager.Data.Models;
+using FlightManager.Web.Areas.Admin.Helpers;
 using FlightManager.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,9 +27,48 @@ namespace FlightManager.Web.Areas.Admin.Controllers
 
         // GET: Users
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber, int? pageSize, int? resultsOnPage)
         {
-            return View(await _userManager.Users.Cast<ApplicationUser>().ToListAsync());
+
+            if (searchString != null || resultsOnPage != null)
+            {
+                pageNumber = 1;
+            }
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+            if (resultsOnPage == null)
+            {
+                resultsOnPage = pageSize;
+            }
+            resultsOnPage = resultsOnPage ?? 10;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["PageSize"] = resultsOnPage;
+
+            ApplicationUsersViewModel model = new ApplicationUsersViewModel();
+            var selectedListItem = model.ResultsOnPageList.FirstOrDefault(x => x.Value == resultsOnPage.ToString()) ?? model.ResultsOnPageList.First(x => x.Value == "10");
+            selectedListItem.Selected = true;
+
+            var query = _userManager.Users.Cast<ApplicationUser>();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(x => x.Email.Contains(searchString)
+                    || x.UserName.Contains(searchString)
+                    || x.FirstName.Contains(searchString)
+                    || x.LastName.Contains(searchString)
+                );
+            }
+            model.ApplicationUser = await PaginatedListHelper<ApplicationUser>.CreateAsync(query.AsNoTracking(), pageNumber ?? 1, resultsOnPage ?? 1);
+            if (model.ApplicationUser.TotalPages > 0 && (pageNumber ?? 1) > model.ApplicationUser.TotalPages)
+            {
+                model.ApplicationUser = await PaginatedListHelper<ApplicationUser>.CreateAsync(query.AsNoTracking(), model.ApplicationUser.TotalPages, resultsOnPage ?? 1);
+            }
+
+            return View(model);
+
+            //return View(await _userManager.Users.Cast<ApplicationUser>().ToListAsync());
         }
         // GET: Users/Details/5
         [Authorize(Roles = "Admin")]
@@ -78,13 +118,13 @@ namespace FlightManager.Web.Areas.Admin.Controllers
 
             // Update it with the values from the view model
             user.UserName = model.UserName;
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, model.Password);
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.SSN = model.SSN;
             user.Address = model.Address;
             user.PhoneNumber = model.PhoneNumber;
+            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, model.Password);
             //user.PasswordHash = checkUser.PasswordHash;
 
             if (ModelState.IsValid)
@@ -141,13 +181,13 @@ namespace FlightManager.Web.Areas.Admin.Controllers
 
             // Update it with the values from the view model
             user.UserName = model.UserName;
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, model.Password);
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.SSN = model.SSN;
             user.Address = model.Address;
             user.PhoneNumber = model.PhoneNumber;
+            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, model.Password);
             //user.PasswordHash = checkUser.PasswordHash;
 
             if (ModelState.IsValid)

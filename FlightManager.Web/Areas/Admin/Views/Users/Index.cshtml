@@ -1,11 +1,23 @@
-﻿@model IEnumerable<FlightManager.Data.Models.ApplicationUser>
+﻿@*@model IEnumerable<FlightManager.Data.Models.ApplicationUser>*@
+@model FlightManager.Web.Areas.Admin.Models.ApplicationUsersViewModel
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Flights</h1>
+<h1>Users</h1>
+
+<form asp-action="Index" method="get">
+    <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+    <div class="form-actions no-color">
+        <p>
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,72 +26,148 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => Model.model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => Model.model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => Model.model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => Model.model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SSN)
+                @Html.DisplayNameFor(model => Model.model.SSN)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => Model.model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
+                @Html.DisplayNameFor(model => Model.model.PhoneNumber)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SSN)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
+        @foreach (var item in Model.ApplicationUser)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SSN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    if (User.IsInRole("Admin"))
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
+                        if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        }
+                        if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     }
-                    if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-                    {
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    }
-                    if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
-                }
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.ApplicationUser.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.ApplicationUser.HasNextPage ? "disabled" : "";
+    var showFromPage = Model.ApplicationUser.PageIndex - 1;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+    var showToPage = showFromPage + 2;
+    showToPage = showToPage > Model.ApplicationUser.TotalPages ? Model.ApplicationUser.TotalPages : showToPage;
+    showFromPage = showToPage - 2;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+}
+
+@if (@Model.ApplicationUser.TotalPages > 0)
+{
+    <form asp-action="Index" method="get">
+        <input type="hidden" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <nav aria-label="Pagination">
+                    <ul class="pagination">
+                        <li class="page-item @prevDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.ApplicationUser.PageIndex - 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Previous
+                            </a>
+                        </li>
+                        @for (int i = showFromPage; i <= showToPage; i++)
+                        {
+                            if (i == Model.ApplicationUser.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a asp-action="Index"
+                                       asp-route-pageNumber="@(i)"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                       asp-route-pageSize="@ViewData["PageSize"]"
+                                       class="page-link">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+                        }
+                        <li class="page-item @nextDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.ApplicationUser.PageIndex + 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label class="float-right">Show <select id="ResultsOnPage" name="ResultsOnPage" asp-items="@Model.ResultsOnPageList" class="custom-select custom-select-sm form-control form-control-sm" style="width: auto;"></select> entries</label>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <span>No flights was found</span>
+}

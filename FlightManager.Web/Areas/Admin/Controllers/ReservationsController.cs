@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using FlightManager.Data;
 using FlightManager.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using FlightManager.Web.Areas.Admin.Models;
+using FlightManager.Web.Areas.Admin.Helpers;
 
 namespace FlightManager.Web.Areas.Admin.Controllers
 {
@@ -24,9 +26,42 @@ namespace FlightManager.Web.Areas.Admin.Controllers
 
         // GET: Admin/Reservations
         [Authorize(Roles = "Admin,Employee")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber, int? pageSize, int? resultsOnPage)
         {
-            return View(await _context.Reservations.ToListAsync());
+            if (searchString != null || resultsOnPage != null)
+            {
+                pageNumber = 1;
+            }
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+            if (resultsOnPage == null)
+            {
+                resultsOnPage = pageSize;
+            }
+            resultsOnPage = resultsOnPage ?? 10;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["PageSize"] = resultsOnPage;
+
+            ReservationsViewModel model = new ReservationsViewModel();
+            var selectedListItem = model.ResultsOnPageList.FirstOrDefault(x => x.Value == resultsOnPage.ToString()) ?? model.ResultsOnPageList.First(x => x.Value == "10");
+            selectedListItem.Selected = true;
+
+            var query = _context.Reservations.Where(f => f.ReservationNumber > 0);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(x => x.Email.Contains(searchString));
+            }
+            model.Reservations = await PaginatedListHelper<Reservations>.CreateAsync(query.AsNoTracking(), pageNumber ?? 1, resultsOnPage ?? 1);
+            if (model.Reservations.TotalPages > 0 && (pageNumber ?? 1) > model.Reservations.TotalPages)
+            {
+                model.Reservations = await PaginatedListHelper<Reservations>.CreateAsync(query.AsNoTracking(), model.Reservations.TotalPages, resultsOnPage ?? 1);
+            }
+
+            return View(model);
+
+            //return View(await _context.Reservations.ToListAsync());
         }
 
         // GET: Admin/Reservations/Details/5

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<FlightManager.Data.Models.Reservations>
+﻿@*@model IEnumerable<FlightManager.Data.Models.Reservations>*@
+@model FlightManager.Web.Areas.Admin.Models.ReservationsViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -7,21 +8,31 @@
 
 <h1>Reservations</h1>
 
+<form asp-action="Index" method="get">
+    <input type="hidden" name="pageSize" value="@ViewData["PageSize"]" />
+    <div class="form-actions no-color">
+        <p>
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => Model.model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationNumber)
+                @Html.DisplayNameFor(model => Model.model.ReservationNumber)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Reservations)
         {
             <tr>
                 <td>
@@ -31,9 +42,85 @@
                     @Html.DisplayFor(modelItem => item.ReservationNumber)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> 
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+@{
+    var prevDisabled = !Model.Reservations.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Reservations.HasNextPage ? "disabled" : "";
+    var showFromPage = Model.Reservations.PageIndex - 1;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+    var showToPage = showFromPage + 2;
+    showToPage = showToPage > Model.Reservations.TotalPages ? Model.Reservations.TotalPages : showToPage;
+    showFromPage = showToPage - 2;
+    showFromPage = showFromPage < 1 ? 1 : showFromPage;
+}
+
+@if (@Model.Reservations.TotalPages > 0)
+{
+    <form asp-action="Index" method="get">
+        <input type="hidden" name="currentFilter" value="@ViewData["CurrentFilter"]" />
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <nav aria-label="Pagination">
+                    <ul class="pagination">
+                        <li class="page-item @prevDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.Reservations.PageIndex - 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Previous
+                            </a>
+                        </li>
+                        @for (int i = showFromPage; i <= showToPage; i++)
+                        {
+                            if (i == Model.Reservations.PageIndex)
+                            {
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">
+                                        @i
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a asp-action="Index"
+                                       asp-route-pageNumber="@(i)"
+                                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                       asp-route-pageSize="@ViewData["PageSize"]"
+                                       class="page-link">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+                        }
+                        <li class="page-item @nextDisabled">
+                            <a asp-action="Index"
+                               asp-route-pageNumber="@(Model.Reservations.PageIndex + 1)"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-pageSize="@ViewData["PageSize"]"
+                               class="page-link">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label class="float-right">Show <select id="ResultsOnPage" name="ResultsOnPage" asp-items="@Model.ResultsOnPageList" class="custom-select custom-select-sm form-control form-control-sm" style="width: auto;"></select> entries</label>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <span>No reservations were found</span>
+}
