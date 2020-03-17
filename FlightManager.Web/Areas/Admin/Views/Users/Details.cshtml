@@ -1,5 +1,4 @@
-﻿@*@model FlightManager.Data.Models.ApplicationUser*@
-@model FlightManager.Web.Areas.Admin.Models.UsersViewModel
+﻿@model FlightManager.Web.Areas.Admin.Models.UsersViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -57,12 +56,5 @@
     </dl>
 </div>
 <div>
-    @*@if (User.Identity.IsAuthenticated)
-    {
-        if (User.IsInRole("admin"))
-        {
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> @("|")
-        }
-    }*@
     <a asp-action="Index">Back to List</a>
 </div>

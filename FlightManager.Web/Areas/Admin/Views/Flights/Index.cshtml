@@ -19,29 +19,32 @@
     </div>
 </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model =>  Model.model.StartLocation)
+                @Html.DisplayNameFor(model => Model.model.StartLocation)
             </th>
             <th>
-                @Html.DisplayNameFor(model =>  Model.model.Destination)
+                @Html.DisplayNameFor(model => Model.model.Destination)
             </th>
             <th>
-                @Html.DisplayNameFor(model =>  Model.model.StartTime)
+                @Html.DisplayNameFor(model => Model.model.StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model =>  Model.model.EndTime)
+                @Html.DisplayNameFor(model => Model.model.EndTime)
             </th>
             <th>
                 Duration
             </th>
             <th>
-                @Html.DisplayNameFor(model =>  Model.model.CustomerCapacity)
+                @Html.DisplayNameFor(model => Model.model.CustomerCapacity)
             </th>
             <th>
                 @Html.DisplayNameFor(model => Model.model.CustomerCapacityBussinessClass)

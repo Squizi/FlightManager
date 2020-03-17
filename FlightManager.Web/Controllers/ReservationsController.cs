@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using FlightManager.Data;
 using FlightManager.Data.Models;
@@ -65,6 +67,19 @@ namespace FlightManager.Web.Controllers
                     }
                     _context.Reservations.Add(reservation);
                     await _context.SaveChangesAsync();
+
+                    SmtpClient client = new SmtpClient("smtp.mailtrap.io");
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("62fc31ef4c5f5e", "45944e2ba3e7f3");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("flightmanager@dev.local");
+                    mailMessage.To.Add(reservation.Email);
+                    mailMessage.IsBodyHtml = false;
+                    mailMessage.Body = "Your reservation for flight number " + reservation.Flight.FlightNumber + " was successful." + "\n";
+                    mailMessage.Subject = "Reservation confirmation.";
+                    client.Send(mailMessage);
+
                     return new RedirectToActionResult("Success", "Reservations", null);
                 }
                 else
@@ -74,6 +89,11 @@ namespace FlightManager.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Success()
+        {
+            return View();
         }
 
         [HttpPost]

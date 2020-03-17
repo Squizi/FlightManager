@@ -26,7 +26,6 @@ namespace FlightManager.Web.Areas.Admin.Controllers
         }
 
         // GET: Users
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(string currentFilter, string searchString, int? pageNumber, int? pageSize, int? resultsOnPage)
         {
 
@@ -50,7 +49,7 @@ namespace FlightManager.Web.Areas.Admin.Controllers
             var selectedListItem = model.ResultsOnPageList.FirstOrDefault(x => x.Value == resultsOnPage.ToString()) ?? model.ResultsOnPageList.First(x => x.Value == "10");
             selectedListItem.Selected = true;
 
-            var query = _userManager.Users.Cast<ApplicationUser>();
+            var query = _userManager.Users.Cast<ApplicationUser>().Where(x => x.UserName != "admin@dev.local");
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -67,11 +66,8 @@ namespace FlightManager.Web.Areas.Admin.Controllers
             }
 
             return View(model);
-
-            //return View(await _userManager.Users.Cast<ApplicationUser>().ToListAsync());
         }
         // GET: Users/Details/5
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -124,7 +120,7 @@ namespace FlightManager.Web.Areas.Admin.Controllers
             user.SSN = model.SSN;
             user.Address = model.Address;
             user.PhoneNumber = model.PhoneNumber;
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, model.Password);
+            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, model.Password);
             //user.PasswordHash = checkUser.PasswordHash;
 
             if (ModelState.IsValid)
@@ -132,9 +128,10 @@ namespace FlightManager.Web.Areas.Admin.Controllers
                 user.Id = ToString();
                 //await _userManager.Add(users);
                 await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, "Employee");
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(model);
         }
 
         // GET: Users/Edit/5
@@ -178,7 +175,7 @@ namespace FlightManager.Web.Areas.Admin.Controllers
 
             // Get the existing student from the db
             ApplicationUser user = await _userManager.FindByIdAsync(id);
-
+            
             // Update it with the values from the view model
             user.UserName = model.UserName;
             user.Email = model.Email;

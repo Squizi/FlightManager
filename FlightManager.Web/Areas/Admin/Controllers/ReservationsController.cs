@@ -13,7 +13,7 @@ using FlightManager.Web.Areas.Admin.Helpers;
 
 namespace FlightManager.Web.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     [Area("Admin")]
     public class ReservationsController : Controller
     {
@@ -60,8 +60,6 @@ namespace FlightManager.Web.Areas.Admin.Controllers
             }
 
             return View(model);
-
-            //return View(await _context.Reservations.ToListAsync());
         }
 
         // GET: Admin/Reservations/Details/5

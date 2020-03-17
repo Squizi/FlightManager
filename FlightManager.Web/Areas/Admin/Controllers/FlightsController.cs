@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FlightManager.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     [Area("Admin")]
     public class FlightsController : Controller
     {
@@ -59,7 +59,6 @@ namespace FlightManager.Areas.Admin.Controllers
             }
 
             return View(model);
-            //return View(await _context.Flight.ToListAsync());
         }
 
         // GET: Flights/Details/5
@@ -82,6 +81,7 @@ namespace FlightManager.Areas.Admin.Controllers
         }
 
         // GET: Flights/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -92,6 +92,7 @@ namespace FlightManager.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ID,StartLocation,Destination,StartTime,EndTime,PlaneType,FlightNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
         {
             if (ModelState.IsValid)
@@ -105,6 +106,7 @@ namespace FlightManager.Areas.Admin.Controllers
         }
 
         // GET: Flights/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -125,6 +127,7 @@ namespace FlightManager.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id, [Bind("ID,StartLocation,Destination,StartTime,EndTime,PlaneType,FlightNumber,PilotName,CustomerCapacity,CustomerCapacityBussinessClass")] Flights flights)
         {
             if (id != flights.ID)
@@ -156,6 +159,7 @@ namespace FlightManager.Areas.Admin.Controllers
         }
 
         // GET: Flights/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -176,6 +180,7 @@ namespace FlightManager.Areas.Admin.Controllers
         // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var flights = await _context.Flight.FindAsync(id);
